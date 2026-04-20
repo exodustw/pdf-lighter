@@ -1,0 +1,19 @@
+/* 共用基礎樣式（viewer 與 popup 共用） */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #181825;
+}
+::-webkit-scrollbar-thumb {
+  background: #45475a;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #585b70;
+}

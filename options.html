@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>PDF Lighter — 設定</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #181825; }
+    ::-webkit-scrollbar-thumb { background: #45475a; border-radius: 3px; }
+
+    body {
+      background: #1e1e2e;
+      color: #cdd6f4;
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 14px;
+      min-height: 100vh;
+    }
+
+    /* ── 頂部 ── */
+    header {
+      background: #181825;
+      border-bottom: 1px solid #313244;
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    header h1 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #cdd6f4;
+      letter-spacing: 0.04em;
+    }
+    .logo {
+      font-size: 22px;
+    }
+    .subtitle {
+      font-size: 12px;
+      color: #6c7086;
+      margin-left: auto;
+    }
+
+    /* ── 主體 ── */
+    main {
+      max-width: 760px;
+      margin: 32px auto;
+      padding: 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* ── 卡片 ── */
+    .card {
+      background: #181825;
+      border: 1px solid #313244;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 14px 20px;
+      background: #11111b;
+      border-bottom: 1px solid #313244;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card-header h2 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #cdd6f4;
+    }
+    .card-header .badge {
+      background: #313244;
+      color: #a6adc8;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-left: auto;
+    }
+
+    .card-body {
+      padding: 16px 20px;
+    }
+
+    /* ── 說明文字 ── */
+    .desc {
+      font-size: 12px;
+      color: #6c7086;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    .desc code {
+      background: #313244;
+      color: #89b4fa;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-family: 'Consolas', monospace;
+      font-size: 11px;
+    }
+
+    /* ── 輸入列 ── */
+    .input-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      background: #313244;
+      border: 1px solid #45475a;
+      color: #cdd6f4;
+      padding: 7px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: 'Consolas', monospace;
+    }
+    input[type="text"]:focus { outline: none; border-color: #89b4fa; }
+    input[type="text"]::placeholder { color: #585b70; }
+
+    button.add-btn {
+      background: #a6e3a1;
+      border: none;
+      color: #1e1e2e;
+      padding: 7px 16px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    button.add-btn:hover { background: #94e2a8; }
+
+    .error {
+      color: #f38ba8;
+      font-size: 11px;
+      min-height: 18px;
+      margin-bottom: 4px;
+    }
+
+    /* ── 項目清單 ── */
+    .item-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .item {
+      background: #313244;
+      border: 1px solid #45475a;
+      border-radius: 7px;
+      padding: 9px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .item.disabled { opacity: 0.45; }
+
+    .item-icon {
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .item-text {
+      flex: 1;
+      font-family: 'Consolas', monospace;
+      font-size: 13px;
+      color: #cdd6f4;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .item-type {
+      font-size: 10px;
+      color: #6c7086;
+      background: #1e1e2e;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .item-toggle, .item-del {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      padding: 3px 5px;
+      border-radius: 4px;
+      line-height: 1;
+    }
+    .item-toggle { color: #a6adc8; }
+    .item-toggle:hover { background: #45475a; }
+    .item-del { color: #f38ba8; }
+    .item-del:hover { background: rgba(243,139,168,0.2); }
+
+    .empty {
+      color: #585b70;
+      font-size: 13px;
+      padding: 8px 2px;
+      text-align: center;
+    }
+
+    /* ── 警示橫幅 ── */
+    .warning-banner {
+      background: rgba(250, 179, 135, 0.12);
+      border: 1px solid rgba(250, 179, 135, 0.35);
+      border-radius: 7px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #fab387;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .warning-banner.hidden { display: none; }
+
+    /* ── 儲存狀態 ── */
+    #save-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #a6e3a1;
+      color: #1e1e2e;
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 13px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    #save-toast.show { opacity: 1; }
+
+    /* ── 色塊（highlight patterns） ── */
+    .swatch {
+      width: 12px; height: 12px;
+      border-radius: 3px;
+      border: 1px solid rgba(255,255,255,0.2);
+      flex-shrink: 0;
+    }
+
+    .color-presets { display: flex; gap: 5px; align-items: center; }
+    .color-preset {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer; padding: 0; flex-shrink: 0;
+      transition: transform 0.1s;
+      position: relative;
+    }
+    .color-preset:hover { transform: scale(1.15); }
+    .color-preset.active { border-color: #cdd6f4; box-shadow: 0 0 0 1px #181825; }
+    .color-custom-btn {
+      background: conic-gradient(#ff0000,#ffff00,#00ff00,#00ffff,#0000ff,#ff00ff,#ff0000) !important;
+      border-color: #45475a;
+    }
+    .color-hidden { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; }
+
+    .flags-input {
+      width: 60px !important;
+      flex: none !important;
+    }
+
+    hr.section-sep {
+      border: none;
+      border-top: 1px solid #313244;
+      margin: 12px 0;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <span class="logo">&#128294;</span>
+  <h1>PDF Lighter</h1>
+  <span class="subtitle">設定</span>
+</header>
+
+<main>
+
+  <!-- ── URL Whitelist ───────────────────────────────────── -->
+  <div class="card">
+    <div class="card-header">
+      <span>&#127760;</span>
+      <h2>網址白名單（URL Patterns）</h2>
+      <span class="badge" id="url-count">0 個</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">
+        僅在 PDF 網址符合以下任一 regex 時，才由 PDF Lighter 接管並開啟自訂檢視器。<br>
+        範例：<code>docs\.example\.com</code>、<code>^https://internal\.example\.com/</code>、<code>.*</code>（全部）
+      </p>
+
+      <div id="url-warning" class="warning-banner">
+        &#9888; 尚未設定任何白名單 — 目前不會攔截任何 PDF。請新增至少一條 pattern。
+      </div>
+
+      <br>
+
+      <div class="input-row">
+        <input id="url-pat-input" type="text" placeholder="URL regex，例如 docs\.example\.com" spellcheck="false">
+        <button class="add-btn" id="url-add-btn">+ 新增</button>
+      </div>
+      <div class="error" id="url-err"></div>
+
+      <div class="item-list" id="url-list"></div>
+    </div>
+  </div>
+
+  <!-- ── Highlight Patterns ─────────────────────────────── -->
+  <div class="card">
+    <div class="card-header">
+      <span>&#128396;</span>
+      <h2>螢光標記 Patterns</h2>
+      <span class="badge" id="hl-count">0 個</span>
+    </div>
+    <div class="card-body">
+      <p class="desc">
+        在 PDF 中以螢光筆標記符合 regex 的文字。也可在開啟 PDF 後於右側面板即時新增。
+      </p>
+
+      <div class="input-row">
+        <input id="hl-pat-input"   type="text" placeholder="Regex，例如 \d{4}-\d{2}-\d{2}" spellcheck="false">
+        <input id="hl-flags-input" type="text" class="flags-input" value="gi" placeholder="flags">
+        <div class="color-presets" id="hl-color-presets">
+          <button class="color-preset active" data-color="#ffff00" style="background:#ffff00" title="黃"></button>
+          <button class="color-preset" data-color="#b3ff6e" style="background:#b3ff6e" title="綠"></button>
+          <button class="color-preset" data-color="#6effff" style="background:#6effff" title="青"></button>
+          <button class="color-preset" data-color="#ff6eb4" style="background:#ff6eb4" title="粉"></button>
+          <button class="color-preset" data-color="#ffaa00" style="background:#ffaa00" title="橙"></button>
+          <button class="color-preset color-custom-btn" id="hl-color-custom-btn" title="自訂顏色…"></button>
+          <input type="color" id="hl-color-custom-input" class="color-hidden" value="#ffff00">
+        </div>
+        <button class="add-btn" id="hl-add-btn">+ 新增</button>
+      </div>
+      <div class="error" id="hl-err"></div>
+
+      <div class="item-list" id="hl-list"></div>
+    </div>
+  </div>
+
+</main>
+
+<div id="save-toast">已儲存</div>
+
+<script src="options.js"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "PDF Lighter",
+  "version": "1.1.0",
+  "description": "在指定網域的 PDF 中以螢光筆標記符合 regex 的文字",
+  "permissions": [
+    "tabs",
+    "storage",
+    "webNavigation",
+    "declarativeNetRequest"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "PDF Lighter"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["viewer.html", "viewer.js", "styles.css", "lib/*"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "icons": {
+    "16":  "icons/icon16.png",
+    "48":  "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
